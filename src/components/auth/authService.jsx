@@ -4,7 +4,7 @@
 import { authStorage } from './authStorage';
 
 const SPOTIFY_CLIENT_ID = '45efbe29234a40aea5d48cd269ac1a03';
-const REDIRECT_URI = window.location.origin;
+const REDIRECT_URI = window.location.origin + '/cleander/';
 
 export const SCOPES = [
 'user-library-read',
