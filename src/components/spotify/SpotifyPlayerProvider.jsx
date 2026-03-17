@@ -16,8 +16,8 @@ export function SpotifyPlayerProvider({ children, isAuthenticated }) {
   }, [isAuthenticated]);
   const [player, setPlayer] = useState(null);
   const [deviceId, setDeviceId] = useState(null);
-  const [isPremium, setIsPremium] = useState(false);
-  const [isReady, setIsReady] = useState(false);
+  // SDK status: 'initializing' | 'connecting' | 'ready' | 'unavailable'
+  const [sdkStatus, setSdkStatus] = useState('initializing');
   const [currentTrack, setCurrentTrack] = useState(null);
   const [playerState, setPlayerState] = useState({
     isPlaying: false,
@@ -41,7 +41,7 @@ export function SpotifyPlayerProvider({ children, isAuthenticated }) {
       if (player) {
         player.disconnect();
         setPlayer(null);
-        setIsReady(false);
+        setSdkStatus('initializing');
         setCurrentTrack(null);
       }
       if (fallbackAudioRef.current) {
@@ -79,6 +79,7 @@ export function SpotifyPlayerProvider({ children, isAuthenticated }) {
   }, [isAuthenticated, spotifyToken]);
 
   const initializePlayer = (token) => {
+    setSdkStatus('connecting');
     const spotifyPlayer = new window.Spotify.Player({
       name: 'Spotify Library Cleaner',
       getOAuthToken: (cb) => {cb(token);},
@@ -89,13 +90,13 @@ export function SpotifyPlayerProvider({ children, isAuthenticated }) {
     spotifyPlayer.addListener('ready', ({ device_id }) => {
       console.log('[SpotifyPlayer] Ready with Device ID', device_id);
       setDeviceId(device_id);
-      setIsReady(true);
+      setSdkStatus('ready');
     });
 
     // Player not ready
     spotifyPlayer.addListener('not_ready', ({ device_id }) => {
       console.log('[SpotifyPlayer] Device has gone offline', device_id);
-      setIsReady(false);
+      setSdkStatus('unavailable');
     });
 
     // Player state changed
@@ -125,12 +126,12 @@ export function SpotifyPlayerProvider({ children, isAuthenticated }) {
 
     spotifyPlayer.addListener('authentication_error', ({ message }) => {
       console.error('[SpotifyPlayer] Auth error:', message);
-      setIsPremium(false);
+      setSdkStatus('unavailable');
     });
 
     spotifyPlayer.addListener('account_error', ({ message }) => {
       console.error('[SpotifyPlayer] Account error:', message);
-      setIsPremium(false);
+      setSdkStatus('unavailable');
     });
 
     spotifyPlayer.addListener('playback_error', ({ message }) => {
@@ -141,18 +142,17 @@ export function SpotifyPlayerProvider({ children, isAuthenticated }) {
     spotifyPlayer.connect().then((success) => {
       if (success) {
         console.log('[SpotifyPlayer] Connected successfully');
-        setIsPremium(true);
         setPlayer(spotifyPlayer);
       } else {
         console.log('[SpotifyPlayer] Connection failed');
-        setIsPremium(false);
+        setSdkStatus('unavailable');
       }
     });
   };
 
   // Play track using Web Playback SDK (Premium only)
   const playTrackWithSDK = async (trackUri) => {
-    if (!deviceId || !isPremium) return false;
+    if (!deviceId || sdkStatus !== 'ready') return false;
 
     const token = spotifyToken;
     try {
@@ -216,7 +216,7 @@ export function SpotifyPlayerProvider({ children, isAuthenticated }) {
   // Unified play function
   const play = async (trackUri, previewUrl) => {
     // Try SDK first (Premium users)
-    if (isPremium && isReady) {
+    if (sdkStatus === 'ready') {
       const success = await playTrackWithSDK(trackUri);
       if (success) return { method: 'sdk', success: true };
     }
@@ -294,11 +294,15 @@ export function SpotifyPlayerProvider({ children, isAuthenticated }) {
     return { isPlaying: false, position: 0, duration: 0, currentTrack: null, method: 'none' };
   };
 
+  const isPremium = sdkStatus === 'ready';
+  const isReady = sdkStatus === 'ready';
+
   const value = {
     player,
     deviceId,
     isPremium,
     isReady,
+    sdkStatus,
     play,
     pause,
     resume,
