@@ -81,7 +81,18 @@ export default function SettingsDialog({
       return;
     }
 
-    window.open('mailto:daniel@d1dx.com?subject=Cleander Feedback&body=' + encodeURIComponent(feedbackMessage));
+    fetch("https://formspree.io/f/xojkkgon", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: feedbackMessage })
+    }).then(res => {
+      if (res.ok) {
+        toast.success("Feedback sent! Thank you.");
+        setFeedbackMessage("");
+      } else {
+        toast.error("Failed to send feedback. Please try again.");
+      }
+    }).catch(() => toast.error("Failed to send feedback. Please try again."));
   };
 
   const handleDownloadBackup = () => {
