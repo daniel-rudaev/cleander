@@ -30,6 +30,7 @@ import SettingsDialog from '@/components/SettingsDialog';
 import SongCardSkeleton from "@/components/ui/SongCardSkeleton";
 import Onboarding from "@/components/ui/Onboarding";
 import MilestoneToast from "@/components/ui/MilestoneToast";
+import useKeyboardShortcuts from "@/hooks/useKeyboardShortcuts";
 
 const BATCH_SIZE = 20;
 const BUFFER_SIZE = 15;
@@ -528,6 +529,13 @@ export default function Home() {
   const currentSong = pendingSongs[0];
   const nextSong = pendingSongs[1];
 
+  useKeyboardShortcuts({
+    onKeep: () => buttonSwipeRef.current?.('right'),
+    onRemove: () => buttonSwipeRef.current?.('left'),
+    onUndo: handleUndo,
+    enabled: pendingSongs.length > 0,
+  });
+
   const reviewedCount = songStorage.getHistory().length;
 
   if (authLoading || isLoading) {
@@ -673,6 +681,18 @@ export default function Home() {
 
         </div>
         }
+
+      {/* Footer */}
+      {!pendingSongs.length && isAuthenticated && (
+        <footer className="flex-shrink-0 py-3 px-6 text-center border-t border-zinc-800/50">
+          <p className="text-xs text-zinc-600">
+            Cleander v1.0.0 ·{' '}
+            <a href="https://github.com/daniel-rudaev/cleander" target="_blank" rel="noopener noreferrer" className="hover:text-zinc-400 transition-colors">
+              GitHub
+            </a>
+          </p>
+        </footer>
+      )}
 
       {/* Playlist Selection Dialog */}
       <AlertDialog open={showPlaylistDialog} onOpenChange={setShowPlaylistDialog}>

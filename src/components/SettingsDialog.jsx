@@ -325,7 +325,7 @@ export default function SettingsDialog({
           variant="outline"
           className="w-full bg-yellow-500 hover:bg-yellow-600 text-black border-yellow-500">
 
-            <a href="https://www.buymeacoffee.com/yourprofile" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.buymeacoffee.com/danielrudaev" target="_blank" rel="noopener noreferrer">
               <Coffee size={18} className="mr-2" />
               Buy Me a Coffee
               <ExternalLink size={14} className="ml-2" />
