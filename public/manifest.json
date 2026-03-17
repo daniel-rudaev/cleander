@@ -1,0 +1,28 @@
+{
+  "name": "Cleander",
+  "short_name": "Cleander",
+  "description": "Swipe through your Spotify liked songs. Keep what you love, remove the rest.",
+  "start_url": "/cleander/",
+  "scope": "/cleander/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#34d399",
+  "icons": [
+    {
+      "src": "favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

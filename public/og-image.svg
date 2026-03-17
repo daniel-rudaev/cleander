@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#09090b"/>
+      <stop offset="100%" style="stop-color:#18181b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#34d399"/>
+      <stop offset="50%" style="stop-color:#2dd4bf"/>
+      <stop offset="100%" style="stop-color:#22d3ee"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <!-- Subtle grid pattern -->
+  <g opacity="0.03">
+    <line x1="0" y1="0" x2="1200" y2="630" stroke="white" stroke-width="1"/>
+    <line x1="400" y1="0" x2="1200" y2="420" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="210" x2="800" y2="630" stroke="white" stroke-width="1"/>
+  </g>
+  <!-- App icon -->
+  <g transform="translate(100, 165)">
+    <rect width="300" height="300" rx="64" fill="url(#accent)"/>
+    <g fill="white">
+      <rect x="173" y="58" width="14" height="142" rx="7"/>
+      <ellipse cx="140" cy="200" rx="43" ry="33" transform="rotate(-15 140 200)"/>
+      <path d="M180 58 C200 76, 212 106, 200 142 L188 142 C197 109, 191 82 180 68Z"/>
+    </g>
+    <g fill="white" opacity="0.9">
+      <path d="M234 47 L239 59 L251 64 L239 69 L234 81 L229 69 L217 64 L229 59Z"/>
+    </g>
+    <g fill="white" opacity="0.7">
+      <path d="M94 71 L96 78 L103 80 L96 82 L94 89 L92 82 L85 80 L92 78Z"/>
+    </g>
+  </g>
+  <!-- Text -->
+  <text x="480" y="270" font-family="system-ui, -apple-system, sans-serif" font-size="96" font-weight="800" fill="url(#accent)">Cleander</text>
+  <text x="480" y="340" font-family="system-ui, -apple-system, sans-serif" font-size="32" fill="#a1a1aa">Swipe through your Spotify library.</text>
+  <text x="480" y="385" font-family="system-ui, -apple-system, sans-serif" font-size="32" fill="#a1a1aa">Keep what you love, remove the rest.</text>
+  <!-- Swipe indicators -->
+  <g transform="translate(480, 420)">
+    <rect width="90" height="36" rx="18" fill="#34d39920" stroke="#34d399" stroke-width="2"/>
+    <text x="45" y="24" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#34d399" text-anchor="middle">KEEP</text>
+  </g>
+  <g transform="translate(590, 420)">
+    <rect width="110" height="36" rx="18" fill="#fb718520" stroke="#fb7185" stroke-width="2"/>
+    <text x="55" y="24" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#fb7185" text-anchor="middle">REMOVE</text>
+  </g>
+</svg>
