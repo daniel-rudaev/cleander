@@ -27,6 +27,9 @@ import { songStorage } from '@/components/storage/songStorage';
 import { SpotifyPlayerProvider } from '@/components/spotify/SpotifyPlayerProvider';
 import TimeStats from '@/components/ui/TimeStats';
 import SettingsDialog from '@/components/SettingsDialog';
+import SongCardSkeleton from "@/components/ui/SongCardSkeleton";
+import Onboarding from "@/components/ui/Onboarding";
+import MilestoneToast from "@/components/ui/MilestoneToast";
 
 const BATCH_SIZE = 20;
 const BUFFER_SIZE = 15;
@@ -76,6 +79,7 @@ export default function Home() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [defaultStarPlaylist, setDefaultStarPlaylist] = useState(null);
   const [sortOrder, setSortOrder] = useState(() => localStorage.getItem(SORT_KEY) || 'liked-asc');
+  const [showOnboarding, setShowOnboarding] = useState(() => !localStorage.getItem("cleander_onboarded"));
   const buttonSwipeRef = React.useRef(null);
   const longPressTimeout = React.useRef(null);
   const isLongPress = React.useRef(false);
@@ -524,16 +528,20 @@ export default function Home() {
   const currentSong = pendingSongs[0];
   const nextSong = pendingSongs[1];
 
+  const reviewedCount = songStorage.getHistory().length;
+
   if (authLoading || isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <EmptyState type="loading" />
+      <div className="fixed inset-0 h-dvh bg-black text-white flex flex-col items-center justify-center">
+        <SongCardSkeleton />
       </div>);
 
   }
 
   return (
     <SpotifyPlayerProvider isAuthenticated={isAuthenticated}>
+      {showOnboarding && <Onboarding onComplete={() => setShowOnboarding(false)} />}
+      <MilestoneToast reviewedCount={reviewedCount} />
       <div className="fixed inset-0 h-dvh bg-black text-white flex flex-col">
       {/* Header */}
       <header className="flex-shrink-0 flex items-center justify-between px-6 py-5 gap-4 border-b border-zinc-800/50">
