@@ -3,7 +3,7 @@ import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import { useSpotifyPlayer } from '@/components/spotify/SpotifyPlayerProvider';
 
 export default function SpotifyPlayer({ trackUri, previewUrl, isActive, trackId }) {
-  const { play, pause, togglePlayPause, isPlaying, position, duration, seek } = useSpotifyPlayer();
+  const { play, pause, togglePlayPause, isPlaying, position, duration, seek, isPremium, isReady } = useSpotifyPlayer();
   const [hasStarted, setHasStarted] = useState(false);
   const [localPlaying, setLocalPlaying] = useState(false);
   const progressRef = useRef(null);
@@ -97,7 +97,7 @@ export default function SpotifyPlayer({ trackUri, previewUrl, isActive, trackId 
         </div>
       </div>
 
-      {!previewUrl && !playing && !hasStarted && (
+      {!previewUrl && !(isPremium && isReady) && !playing && !hasStarted && (
         <p className="text-[10px] text-zinc-600 text-center">Preview not available</p>
       )}
     </div>
