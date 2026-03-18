@@ -8,7 +8,7 @@ import {
   DialogTrigger } from
 '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Settings, Coffee, Book, ExternalLink, CloudOff, LogOut, User, Download, Upload, ArrowUpDown } from 'lucide-react';
+import { Settings, Book, ExternalLink, CloudOff, LogOut, User, Download, Upload, ArrowUpDown } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
@@ -177,6 +177,20 @@ export default function SettingsDialog({
                 <p className="text-sm font-medium text-white truncate">{spotifyUser.display_name}</p>
                 <p className="text-xs text-zinc-400 truncate">{spotifyUser.email}</p>
               </div>
+              <Button
+              onClick={async () => {
+                songStorage.clear();
+                songStorage.clearHistory();
+                songStorage.clearPlaylists();
+                await logout();
+                toast.success('Logged out successfully');
+                onOpenChange(false);
+              }}
+              variant="ghost"
+              size="sm"
+              className="text-zinc-400 hover:text-red-400 transition-colors shrink-0">
+                <LogOut size={16} />
+              </Button>
             </div>
           }
 
@@ -319,19 +333,6 @@ export default function SettingsDialog({
             </Button>
           </div>
 
-          {/* Buy Me a Coffee */}
-          <Button
-          asChild
-          variant="outline"
-          className="w-full bg-yellow-500 hover:bg-yellow-600 text-black border-yellow-500">
-
-            <a href="https://www.buymeacoffee.com/danielrudaev" target="_blank" rel="noopener noreferrer">
-              <Coffee size={18} className="mr-2" />
-              Buy Me a Coffee
-              <ExternalLink size={14} className="ml-2" />
-            </a>
-          </Button>
-
           {/* Privacy Policy */}
           <div className="text-xs text-zinc-500 space-y-2 pt-2 border-t border-zinc-800">
             <div className="flex items-center gap-1 text-zinc-300 font-semibold">
@@ -345,22 +346,14 @@ export default function SettingsDialog({
             </p>
           </div>
 
-          {/* Logout */}
-          <Button
-          onClick={async () => {
-            songStorage.clear();
-            songStorage.clearHistory();
-            songStorage.clearPlaylists();
-            await logout();
-            toast.success('Logged out successfully');
-            onOpenChange(false);
-          }}
-          variant="destructive"
-          className="w-full bg-red-600 hover:bg-red-700 text-white">
-
-            <LogOut size={18} className="mr-2" />
-            Logout from Spotify
-          </Button>
+          {/* Made by */}
+          <div className="text-center text-xs text-zinc-500 pt-2 border-t border-zinc-800">
+            Made by{' '}
+            <a href="https://danielrudaev.com" target="_blank" rel="noopener noreferrer"
+               className="text-zinc-400 hover:text-white transition-colors underline">
+              Daniel Rudaev
+            </a>
+          </div>
         </div>
       </DialogContent>
     </Dialog>);
